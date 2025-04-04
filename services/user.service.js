@@ -128,3 +128,18 @@ exports.getUserService = async (userId) => {
     }
 }
 
+exports.verifyTokenService = async (token) => {
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        if (!decoded) {
+            throw new ApiError(401, 'Invalid token');
+        }
+
+        return { message: "Valid token", user: decoded }
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+}
+

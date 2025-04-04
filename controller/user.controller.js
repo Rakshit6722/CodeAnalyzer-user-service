@@ -1,4 +1,4 @@
-const { userRegisterService, editUserService, getUserService, userLoginService } = require("../services/user.service");
+const { userRegisterService, editUserService, getUserService, userLoginService, verifyTokenService } = require("../services/user.service");
 const ApiError = require('../utils/ApiError.js');
 
 exports.registerUser = async (req, res) => {
@@ -98,5 +98,23 @@ exports.getUser = async (req, res) => {
         }
 
         res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
+exports.verifyToken = async (req, res) => {
+    try{
+        const {token} = req.body
+        if(!token) return res.status(400).json({error: 'Token is required'})
+        
+        const response = await verifyTokenService(token)
+        res.status(200).json(response);
+    }catch(err){
+        console.error(err)
+
+        if (err instanceof ApiError) {
+            return res.status(err.statusCode).json({ error: err.message });
+        }
+
+        return res.status(500).json({ error: 'Internal Server Error' });
     }
 }
