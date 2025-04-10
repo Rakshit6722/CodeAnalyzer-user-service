@@ -73,7 +73,7 @@ exports.userLoginService = async (loginData) => {
         const token = jwt.sign(
             { userId: user._id, email: user.email, role: user.role },
             process.env.JWT_SECRET,
-            { expiresIn: '1h' }
+            { expiresIn: '1d' }
         );
 
         return { message: 'Login successful', token, user };
@@ -138,6 +138,7 @@ exports.verifyTokenService = async (token) => {
 
         return { message: "Valid token", user: decoded }
     } catch (err) {
+
         console.error(err);
         throw err;
     }

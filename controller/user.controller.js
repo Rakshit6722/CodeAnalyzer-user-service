@@ -109,7 +109,11 @@ exports.verifyToken = async (req, res) => {
         const response = await verifyTokenService(token)
         res.status(200).json(response);
     }catch(err){
-        console.error(err)
+        console.error(err.name)
+
+        if(err.name === 'TokenExpiredError'){
+            return res.status(401).json({ message: "Token expired" })
+        }
 
         if (err instanceof ApiError) {
             return res.status(err.statusCode).json({ error: err.message });
